@@ -1,5 +1,10 @@
 name: Build
 
+on:
+  push:
+    branches: [ "main" ]   # ou "master" si ta branche par défaut s'appelle master
+  workflow_dispatch:        # ← ceci ajoute le bouton "Run workflow"
+
 # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#concurrency
 concurrency: 
   group: "build"
