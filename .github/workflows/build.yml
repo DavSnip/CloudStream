@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [ "master" ]   # ta branche par défaut d'après ta capture
+    branches: [ "master" ]
   workflow_dispatch:
 
 jobs:
@@ -16,36 +16,20 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Gradle exec perm
+      - name: Grant execute permission for Gradle
         run: chmod +x ./gradlew
 
-      # 1) Lister les projets & tâches pour voir si :make existe
-      - name: Show Gradle projects
-        run: ./gradlew projects
+      - name: Build ExampleProvider
+        run: ./gradlew ExampleProvider:make
 
-      - name: Show Gradle tasks
-        run: ./gradlew tasks --all || true
-
-      # 2) Tenter la build de tous les modules qui ont une tâche :make
-      - name: Build all :make tasks
-        shell: bash
-        run: |
-          set -e
-          ./gradlew tasks --all | grep -Eo '(:[A-Za-z0-9_-]+){1,}:make' | sort -u | while read -r task; do
-            echo "==> Running $task"
-            ./gradlew "$task"
-          done
-
-      # 3) Localiser les .cs3 produits (log visible)
       - name: Locate .cs3
         run: |
           echo "Searching for .cs3 files..."
-          find . -type f -name "*.cs3" -print || true
+          find . -type f -name "*.cs3" -print
 
-      # 4) Upload avec un glob large
       - name: Upload artifacts (.cs3)
         uses: actions/upload-artifact@v4
         with:
           name: cs3
           path: "**/*.cs3"
-          if-no-files-found: warn
+          if-no-files-found: error
