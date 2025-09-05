@@ -1,0 +1,8 @@
+{
+  "name": "CloudStream",
+  "description": "Dépôt perso pour Cloudstream",
+  "manifestVersion": 1,
+  "pluginLists": [
+    "https://raw.githubusercontent.com/DavSnip/CloudStream/master/plugins.json"
+  ]
+}
